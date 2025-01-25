@@ -1,75 +1,64 @@
-# 🧹 Fedorable: Fedora Cleaning Script
+```markdown
+# 🧹 Fedorable: Fedora System Optimizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Fedora Version](https://img.shields.io/badge/Fedora-41+-blue.svg)](https://getfedora.org/)
 
-Fedorable is a command-line utility designed to maintain and optimize your Fedora Linux system. It automates common cleanup tasks to keep your Fedora installation efficient and well-maintained.
+Fedorable is an all-in-one maintenance tool for Fedora Linux that automates system optimization with safety and style. Get instant system hygiene without the hassle!
 
-## ✨ Features
+## 🚀 Instant Installation & Execution
 
-- **DNF5 Integration**: Utilizes the full capabilities of DNF5
-- **Comprehensive Cleaning**: Manages package caches, old kernels, and more
-- **System Safety**: Implements non-destructive operations with clear feedback
-- **Performance Optimization**: Improves system efficiency through targeted cleanup tasks
-
-## 🧼 Cleanup Tasks
-
-Fedorable performs the following cleanup operations:
-
-1. **Package List Update**: Refreshes the list of available packages.
-2. **Unused Package Removal**: Removes packages that were automatically installed as dependencies but are no longer required.
-3. **DNF Cache Cleaning**: Clears the DNF cache to free up disk space.
-4. **Old Kernel Removal**: Removes old kernel versions, keeping only the current and one previous version.
-5. **User Cache Cleaning**: Clears user-specific cache files from `/home/*/.cache/`.
-6. **System Journal Cleanup**: Removes old systemd journal logs.
-7. **Temporary File Removal**: Clears temporary files from `/tmp/`.
-8. **Orphaned Package Removal**: Removes packages that are no longer part of any repository.
-
-## 🛠 Installation
-
-1. Clone this repository:
-   ```
-   git clone https://github.com/yourusername/fedorable.git
-   cd fedorable
-   ```
-
-2. Make the script executable:
-   ```
-   chmod +x fedorable.sh
-   ```
-
-## 🚀 Usage
-
-Execute the script with sudo privileges:
-
-```
-sudo ./fedorable.sh
+```bash
+curl -sSL https://raw.githubusercontent.com/dacrab/fedorable/main/fedorable.sh | bash
 ```
 
-The script will guide you through the cleaning process, providing feedback at each step.
+*or for wget users:*
 
-## 🔧 Customization
+```bash
+wget -qO- https://raw.githubusercontent.com/dacrab/fedorable/main/fedorable.sh | bash
+```
 
-To customize the cleanup process, edit `fedorable.sh` in your preferred text editor. You can modify, add, or remove cleaning tasks as needed.
+This will:
+1. Download the latest version securely
+2. Request sudo privileges when needed
+3. Execute with live progress visualization
+4. Show final storage status
 
-## 🤝 Contributing
+## ✨ Key Features
 
-Contributions are welcome, including bug reports, feature requests, and pull requests. Please refer to our [contribution guidelines](CONTRIBUTING.md) for more information.
+- 🧼 Automatic package cleanup & optimization
+- 🪓 Smart kernel version management
+- 📦 DNF5 cache maintenance
+- 🗑️ Temporary file purging
+- 📊 Storage space visualization
+- ⚡ Live Braille-style progress indicators
+- 🔄 Automatic system database repairs
 
-## 🔒 Security
+## 🛡️ Safety First
 
-This script performs system-wide operations. Always review scripts that require sudo privileges before execution. While we prioritize system safety, user discretion is advised.
+- Non-destructive operations
+- Current kernel protection
+- Transparent process reporting
+- Built-in error recovery
+
+## 📌 Requirements
+
+- Fedora 41+ (or compatible RHEL derivative)
+- Standard system utilities (curl/wget, sudo)
+- Internet connection for initial download
+
+## 🔒 Security Note
+
+Always examine scripts before execution:
+```bash
+curl -sSL https://raw.githubusercontent./dacrab/fedorable/main/fedorable.sh | less
+```
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙌 Acknowledgements
-
-- The Fedora community
-- The DNF team for their robust package management tool
-- All users and contributors of this project
+MIT Licensed - See [LICENSE](LICENSE) for details.
 
 ---
 
-Enhance your Fedora system's performance with Fedorable. If you find this tool useful, please consider starring ⭐ the repository.
+**Maintain your Fedora system with style!** ⭐ Star the repo if you find this useful.
+```
