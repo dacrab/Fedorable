@@ -115,7 +115,7 @@ run_cmd() {
     local description="${2:-Command execution}"
     
     log_msg "Running: $description"
-    
+
     if [[ $DRY_RUN -eq 1 ]]; then
         log_msg "[DRY RUN] Would execute: $cmd"
         return 0
@@ -287,11 +287,11 @@ task_remove_old_kernels() {
 
     confirm_action "Proceed with removing old kernels?" || return 0
     run_cmd "dnf remove --oldinstallonly --setopt installonly_limit=$KERNELS_TO_KEEP -y" "Remove old kernels"
-    if [[ $? -eq 0 ]]; then
+                    if [[ $? -eq 0 ]]; then
         log_success "Old kernels removed successfully."
-    else
+                    else
         log_error "Failed to remove old kernels."
-    fi
+        fi
 }
 
 task_clean_journal() {
@@ -305,7 +305,7 @@ task_clean_journal() {
 
 task_clean_temp_files() {
     print_header "Temporary File Cleanup (Age > $TEMP_FILE_AGE_DAYS days)"
-    
+
     if [[ $DRY_RUN -eq 1 ]]; then
         local found_tmp=$(find /tmp -type f -atime +"$TEMP_FILE_AGE_DAYS" -print 2>/dev/null | wc -l)
         local found_var_tmp=$(find /var/tmp -type f -atime +"$TEMP_FILE_AGE_DAYS" -print 2>/dev/null | wc -l)
@@ -320,17 +320,17 @@ task_clean_temp_files() {
 
 task_update_grub() {
     print_header "GRUB Configuration Update"
-    
+
     # Try grubby first, then fall back to grub2-mkconfig if needed
     if check_command grubby; then
         run_cmd "grubby --update-kernel=ALL" "Update kernel entries via grubby"
         if [[ $? -eq 0 ]]; then
-            local default_kernel=$(grubby --default-kernel)
-            log_msg "Default kernel set to: $default_kernel"
+             local default_kernel=$(grubby --default-kernel)
+             log_msg "Default kernel set to: $default_kernel"
             log_success "GRUB updated successfully via grubby."
             return 0
         else
-            log_warn "grubby update failed. Will attempt fallback using grub2-mkconfig."
+             log_warn "grubby update failed. Will attempt fallback using grub2-mkconfig."
         fi
     else
         log_msg "grubby command not found. Will use grub2-mkconfig."
@@ -338,7 +338,7 @@ task_update_grub() {
 
     # Fallback to grub2-mkconfig
     local grub_cfg=""
-    if [[ -d /sys/firmware/efi/efivars ]]; then
+        if [[ -d /sys/firmware/efi/efivars ]]; then
         if [[ -f /boot/efi/EFI/fedora/grub.cfg ]]; then 
             grub_cfg="/boot/efi/EFI/fedora/grub.cfg"
         elif [[ -f /boot/grub2/grub.cfg ]]; then 
@@ -405,7 +405,7 @@ task_reset_failed_units() {
 
     log_warn "Found $failed_units failed systemd units. Resetting..."
     systemctl --failed --no-legend | tee -a "$LOG_FILE"
-    
+
     run_cmd "systemctl reset-failed" "Reset failed systemd units"
     if [[ $? -eq 0 ]]; then
         log_success "Failed systemd units reset successfully."
@@ -463,27 +463,27 @@ Task Selection:
   --no-reset-failed     Skip resetting failed systemd units.
   --no-trim             Skip manual SSD TRIM run.
 EOF
-    exit 0
+  exit 0
 }
 
 parse_args() {
     local TEMP_ARGS
     TEMP_ARGS=$(getopt -o hyq --long help,config:,yes,dry-run,quiet,check-only,all,none,no-update,no-autoremove,no-clean-dnf,no-clean-kernels,no-clean-journal,no-clean-temp,no-update-grub,no-clean-flatpak,no-optimize-rpmdb,no-reset-failed,no-trim -n "$SCRIPT_NAME" -- "$@")
 
-    if [[ $? -ne 0 ]]; then
-        echo "Error parsing options. Use --help for usage." >&2
-        exit 1
-    fi
+if [[ $? -ne 0 ]]; then
+  echo "Error parsing options. Use --help for usage." >&2
+  exit 1
+fi
 
-    eval set -- "$TEMP_ARGS"
+eval set -- "$TEMP_ARGS"
 
-    while true; do
-        case "$1" in
-            -h | --help) SHOW_HELP=1; shift ;;
+while true; do
+  case "$1" in
+    -h | --help) SHOW_HELP=1; shift ;;
             --config) CONFIG_FILE="$2"; shift 2 ;;
-            -y | --yes) FORCE_YES=1; shift ;;
-            --dry-run) DRY_RUN=1; shift ;;
-            -q | --quiet) QUIET_MODE=1; shift ;;
+    -y | --yes) FORCE_YES=1; shift ;;
+    --dry-run) DRY_RUN=1; shift ;;
+    -q | --quiet) QUIET_MODE=1; shift ;;
             --check-only) CHECK_ONLY=1; shift ;;
             
             --all)
@@ -508,11 +508,11 @@ parse_args() {
             --no-optimize-rpmdb) OPTIMIZE_RPMDB=0; shift ;;
             --no-reset-failed) RESET_FAILED_UNITS=0; shift ;;
             --no-trim) TRIM=0; shift ;;
-            
-            --) shift; break ;;
-            *) echo "Internal error processing options!" >&2 ; exit 1 ;;
-        esac
-    done
+
+    --) shift; break ;;
+    *) echo "Internal error processing options!" >&2 ; exit 1 ;;
+  esac
+done
 }
 
 #=============================================
@@ -521,32 +521,32 @@ parse_args() {
 main() {
     # Parse command line arguments
     parse_args "$@"
-    
-    # Show help if requested
+
+# Show help if requested
     [[ $SHOW_HELP -eq 1 ]] && show_help
-    
+
     # Check for root privileges
-    if [[ "$EUID" -ne 0 ]]; then
-        echo "ERROR: This script must be run as root or using sudo." >&2
-        exit 1
-    fi
-    
+if [[ "$EUID" -ne 0 ]]; then
+    echo "ERROR: This script must be run as root or using sudo." >&2
+    exit 1
+fi
+
     # Setup logging
-    mkdir -p "$LOG_DIR" || { echo "ERROR: Could not create log directory: $LOG_DIR" >&2; exit 1; }
-    touch "$LOG_FILE" || { echo "ERROR: Could not create log file: $LOG_FILE" >&2; exit 1; }
+mkdir -p "$LOG_DIR" || { echo "ERROR: Could not create log directory: $LOG_DIR" >&2; exit 1; }
+touch "$LOG_FILE" || { echo "ERROR: Could not create log file: $LOG_FILE" >&2; exit 1; }
     chmod 600 "$LOG_FILE"
-    
-    # Create lock file and set trap for cleanup
-    create_lock
+
+# Create lock file and set trap for cleanup
+create_lock
     trap remove_lock EXIT INT TERM
     
     # Load user config
     load_config
-    
+
     # Print startup message
     log_msg "--- Fedorable System Maintenance Script Started ---"
-    [[ $DRY_RUN -eq 1 ]] && log_warn "*** DRY RUN MODE ENABLED - NO CHANGES WILL BE MADE ***"
-    
+[[ $DRY_RUN -eq 1 ]] && log_warn "*** DRY RUN MODE ENABLED - NO CHANGES WILL BE MADE ***"
+
     # Record initial disk usage
     local initial_disk_usage=$(df -h /)
     
@@ -564,22 +564,22 @@ main() {
     [[ $TRIM -eq 1 ]] && task_ssd_trim
     
     # Final summary
-    print_header "Maintenance Summary"
+print_header "Maintenance Summary"
     local final_disk_usage=$(df -h /)
-    log_msg "Initial Disk Usage (/):"
-    log_msg "$initial_disk_usage"
-    log_msg "Final Disk Usage (/):"
-    log_msg "$final_disk_usage"
-    
-    [[ $DRY_RUN -eq 1 ]] && log_warn "*** DRY RUN COMPLETED - NO CHANGES WERE MADE ***"
-    
-    if [[ $ERROR_COUNT -gt 0 ]]; then
-        log_error "Script finished with $ERROR_COUNT error(s). Review log: $LOG_FILE"
-        exit 1
-    else
-        log_success "System maintenance completed successfully!"
-        exit 0
-    fi
+log_msg "Initial Disk Usage (/):"
+log_msg "$initial_disk_usage"
+log_msg "Final Disk Usage (/):"
+log_msg "$final_disk_usage"
+
+[[ $DRY_RUN -eq 1 ]] && log_warn "*** DRY RUN COMPLETED - NO CHANGES WERE MADE ***"
+
+if [[ $ERROR_COUNT -gt 0 ]]; then
+    log_error "Script finished with $ERROR_COUNT error(s). Review log: $LOG_FILE"
+    exit 1
+else
+    log_success "System maintenance completed successfully!"
+    exit 0
+fi
 }
 
 # Execute main function
